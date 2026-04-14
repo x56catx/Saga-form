@@ -121,11 +121,12 @@ body {
 }
 .section-num {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   letter-spacing: 0.15em;
-  color: var(--gold);
-  opacity: 0.8;
+  color: #e8c46a;
+  opacity: 1;
   white-space: nowrap;
+  font-weight: 700;
 }
 .section-line {
   flex: 1;
@@ -136,10 +137,10 @@ body {
 
 .field { margin-bottom: 1rem; }
 .field-label {
-  font-size: 0.78rem;
-  font-weight: 500;
+  font-size: 0.85rem;
+  font-weight: 700;
   letter-spacing: 0.06em;
-  color: var(--text-sub);
+  color: rgba(240,237,232,0.9);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -607,14 +608,18 @@ function handleSubmit() {
   var salesRep = selectedSales ? selectedSales.textContent.trim() : '';
 
   var seminars = [];
-  if (ecChecked) seminars.push('ECサイト運用');
   if (snsChecked) seminars.push('SNS運用');
+  if (ecChecked) seminars.push('ECサイト運用');
 
+  var hasError = false;
   showError('err-company', !company);
   showError('err-attendee', !attendees[0]);
   showError('err-time', !arrivalTime);
   showError('err-seminar', seminars.length === 0);
-  if (!company || !attendees[0] || !arrivalTime || seminars.length === 0) return;
+  if (!company || !attendees[0] || !arrivalTime || seminars.length === 0) {
+    hasError = true;
+  }
+  if (hasError) return;
 
   var btn = document.getElementById('submit-btn');
   btn.disabled = true;
