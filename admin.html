@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>佐賀ソリューションフェア 2026 — 管理画面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f5f7;
+  --white: #ffffff;
+  --border: #e5e7eb;
+  --border2: #d1d5db;
+  --red: #7B2228;
+  --red-light: #fef2f2;
+  --text: #111827;
+  --text-sub: #6b7280;
+  --text-hint: #9ca3af;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --purple: #7c3aed;
+  --purple-light: #f5f3ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --orange: #d97706;
+}
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-badge { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; padding: 4px 12px; border-radius: 4px; }
+.header-title { font-size: 0.85rem; font-weight: 500; color: var(--text-sub); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.refresh-btn { display: flex; align-items: center; gap: 6px; padding: 7px 16px; background: var(--white); border: 1px solid var(--border2); border-radius: 8px; color: var(--text-sub); font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+.refresh-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+.last-updated { font-size: 0.72rem; color: var(--text-hint); }
+.main { padding: 1.75rem 2rem 4rem; max-width: 1400px; margin: 0 auto; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-bottom: 1.75rem; }
+.kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem 1.6rem; display: flex; align-items: flex-start; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: box-shadow 0.2s; }
+.kpi-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.kpi-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
+.kpi-icon.red { background: var(--red-light); }
+.kpi-icon.green { background: var(--green-light); }
+.kpi-icon.blue { background: var(--blue-light); }
+.kpi-icon.purple { background: var(--purple-light); }
+.kpi-label { font-size: 0.7rem; color: var(--text-hint); font-weight: 500; letter-spacing: 0.05em; margin-bottom: 4px; }
+.kpi-value { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.kpi-value.red { color: var(--red); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub { font-size: 0.7rem; color: var(--text-hint); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid1 { margin-bottom: 14px; }
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.panel-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+.panel-body { padding: 1.25rem 1.5rem; }
+.bar-chart { display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label { font-size: 0.75rem; color: var(--text-sub); min-width: 72px; text-align: right; white-space: nowrap; }
+.bar-track { flex: 1; height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+.bar-count { font-size: 0.78rem; font-weight: 700; color: var(--text); min-width: 24px; text-align: right; }
+.timeline { display: flex; flex-direction: column; gap: 8px; }
+.tl-row { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--bg); border-radius: 8px; }
+.tl-time { font-size: 0.75rem; font-weight: 700; color: var(--red); min-width: 44px; }
+.tl-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.tl-fill { height: 100%; border-radius: 4px; background: var(--red); opacity: 0.65; transition: width 0.8s; }
+.tl-count { font-size: 0.75rem; font-weight: 700; color: var(--text-sub); min-width: 28px; text-align: right; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: #fafafa; }
+.search-input { padding: 7px 12px; background: var(--white); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 0.78rem; font-family: inherit; outline: none; min-width: 220px; transition: border-color 0.15s; }
+.search-input:focus { border-color: var(--red); }
+.search-input::placeholder { color: var(--text-hint); }
+.filter-select { padding: 7px 12px; background: var(--white); border: 1px solid var(--border2); border-radius: 8px; color: var(--text-sub); font-size: 0.78rem; font-family: inherit; outline: none; cursor: pointer; transition: border-color 0.15s; }
+.filter-select:focus { border-color: var(--red); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+thead th { padding: 10px 16px; text-align: left; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; color: var(--text-hint); text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; background: #fafafa; }
+thead th:hover { color: var(--red); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:hover { background: #fafafa; }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 13px 16px; color: var(--text-sub); white-space: nowrap; }
+td.company { color: var(--text); font-weight: 700; }
+td.time { color: var(--red); font-weight: 700; }
+.tag { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 0.67rem; font-weight: 700; margin-right: 4px; }
+.tag-sns { background: var(--blue-light); color: var(--blue); }
+.tag-ec { background: var(--purple-light); color: var(--purple); }
+.att-wrap { display: flex; align-items: center; gap: 6px; }
+.att-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0; }
+.no-data { text-align: center; padding: 3rem; color: var(--text-hint); font-size: 0.82rem; }
+.loading { display: flex; align-items: center; justify-content: center; padding: 2.5rem; gap: 10px; color: var(--text-hint); font-size: 0.8rem; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.table-count-badge { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.7rem; font-weight: 700; color: var(--text-sub); }
+.demo-badge { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 10px 16px; margin-bottom: 1.25rem; font-size: 0.75rem; color: var(--orange); display: none; }
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .main { padding: 1rem; }
+  .header { padding: 0 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <span class="header-badge">TOSHIBA TEC</span>
+    <span class="header-title">佐賀ソリューションフェア 2026　管理画面</span>
+  </div>
+  <div class="header-right">
+    <span class="last-updated" id="last-updated">—</span>
+    <button class="refresh-btn" onclick="loadData()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 2.5v2.5H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      更新
+    </button>
+    <button class="refresh-btn" onclick="downloadExcel()" style="background:#f0fdf4;border-color:#bbf7d0;color:#059669;">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Excelダウンロード
+    </button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="demo-badge" id="demo-badge">📊 デモデータを表示しています。接続エラーが発生しています。</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+    <div class="panel">
+      <div class="panel-body" style="padding:1.25rem 1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-hint);font-weight:600;letter-spacing:0.05em;margin-bottom:3px;">申し込み社数の目標</div>
+            <div style="display:flex;align-items:baseline;gap:6px;">
+              <span style="font-size:1.6rem;font-weight:700;color:var(--red);" id="gauge-company">—</span>
+              <span style="font-size:0.85rem;color:var(--text-hint);">/ 30社</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.72rem;color:var(--text-hint);margin-bottom:3px;">達成率</div>
+            <div style="font-size:1.4rem;font-weight:700;" id="gauge-company-pct">—%</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;height:14px;overflow:hidden;margin-bottom:8px;">
+          <div id="gauge-company-bar" style="height:100%;border-radius:8px;background:var(--red);transition:width 1s cubic-bezier(0.4,0,0.2,1);width:0%;"></div>
+        </div>
+        <div style="font-size:0.75rem;font-weight:600;" id="gauge-company-msg">—</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-body" style="padding:1.25rem 1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-hint);font-weight:600;letter-spacing:0.05em;margin-bottom:3px;">来場者数の目標</div>
+            <div style="display:flex;align-items:baseline;gap:6px;">
+              <span style="font-size:1.6rem;font-weight:700;color:var(--green);" id="gauge-att">—</span>
+              <span style="font-size:0.85rem;color:var(--text-hint);">/ 50名</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.72rem;color:var(--text-hint);margin-bottom:3px;">達成率</div>
+            <div style="font-size:1.4rem;font-weight:700;color:var(--green);" id="gauge-att-pct">—%</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;height:14px;overflow:hidden;margin-bottom:8px;">
+          <div id="gauge-att-bar" style="height:100%;border-radius:8px;background:var(--green);transition:width 1s cubic-bezier(0.4,0,0.2,1);width:0%;"></div>
+        </div>
+        <div style="font-size:0.75rem;font-weight:600;" id="gauge-att-msg">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div class="kpi-icon red">📋</div>
+        <div>
+          <div class="kpi-label">総申し込み数</div>
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <div class="kpi-value red" id="kpi-total">—</div>
+            <div style="font-size:0.8rem;color:var(--text-hint);">/ 30社</div>
+          </div>
+          <div class="kpi-sub" id="kpi-progress-text">目標まで — 社</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:6px;overflow:hidden;height:6px;">
+        <div id="kpi-progress-bar" style="height:100%;background:var(--red);border-radius:6px;transition:width 0.8s;width:0%"></div>
+      </div>
+    </div>
+    <div class="kpi-card" style="flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div class="kpi-icon green">👥</div>
+        <div>
+          <div class="kpi-label">総来場者数</div>
+          <div style="display:flex;align-items:baseline;gap:8px;">
+            <div class="kpi-value green" id="kpi-attendees">—</div>
+            <div style="font-size:0.8rem;color:var(--text-hint);">/ 50名</div>
+          </div>
+          <div class="kpi-sub" id="kpi-att-progress-text">目標まで — 名</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:6px;overflow:hidden;height:6px;">
+        <div id="kpi-att-progress-bar" style="height:100%;background:#059669;border-radius:6px;transition:width 0.8s;width:0%"></div>
+      </div>
+    </div>
+    <div class="kpi-card"><div class="kpi-icon blue">🛒</div><div><div class="kpi-label">ECサイト運用</div><div class="kpi-value blue" id="kpi-ec">—</div><div class="kpi-sub">名参加予定（13:30〜）</div></div></div>
+    <div class="kpi-card"><div class="kpi-icon purple">📱</div><div><div class="kpi-label">SNS運用</div><div class="kpi-value purple" id="kpi-sns">—</div><div class="kpi-sub">名参加予定（15:00〜）</div></div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">担当営業別　申し込み数</span></div>
+      <div class="panel-body"><div class="bar-chart" id="sales-chart"><div class="loading"><div class="spinner"></div>読み込み中...</div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">来場予定時間帯</span></div>
+      <div class="panel-body"><div class="timeline" id="time-chart"><div class="loading"><div class="spinner"></div>読み込み中...</div></div></div>
+    </div>
+  </div>
+
+  <div class="grid1">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">申し込み一覧</span>
+        <span class="table-count-badge" id="table-count">— 件</span>
+      </div>
+      <div class="filters">
+        <input class="search-input" type="text" id="search" placeholder="🔍　企業名・来場者名で検索..." oninput="renderTable()" />
+        <select class="filter-select" id="filter-sales" onchange="renderTable()">
+          <option value="">すべての担当営業</option>
+          <option>真宮 清</option><option>山本 和寛</option><option>野田 健次</option>
+          <option>黒川 祐司</option><option>上野 瑠久</option><option>わからない</option>
+        </select>
+        <select class="filter-select" id="filter-seminar" onchange="renderTable()">
+          <option value="">すべてのセミナー</option>
+          <option>ECサイト運用</option><option>SNS運用</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortBy('timestamp')">No. / 受付日時</th>
+              <th onclick="sortBy('company')">企業名</th>
+              <th>来場者</th>
+              <th onclick="sortBy('time')">来場時間</th>
+              <th>参加セミナー</th>
+              <th onclick="sortBy('sales')">担当営業</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="7" class="no-data"><div class="loading"><div class="spinner"></div>読み込み中...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec';
+var allData = [];
+var sortKey = 'timestamp';
+var sortDir = 1;
+
+function loadData() {
+  fetch(SCRIPT_URL + '?action=get')
+    .then(function(r){return r.json();})
+    .then(function(d){allData=d;render();document.getElementById('last-updated').textContent='最終更新: '+new Date().toLocaleTimeString('ja-JP');})
+    .catch(function(){
+      document.getElementById('demo-badge').style.display='block';
+      useDemoData();
+    });
+}
+
+function useDemoData() {
+  allData = [
+    {timestamp:'2026/06/01 10:23',company:'株式会社サンプル商事',attendee1:'田中 太郎',attendee2:'鈴木 花子',attendee3:'',time:'13:00',seminars:'ECサイト運用、SNS運用',sales:'上野 瑠久'},
+    {timestamp:'2026/06/02 14:11',company:'フレッシュマート佐賀',attendee1:'山田 一郎',attendee2:'',attendee3:'',time:'14:00',seminars:'SNS運用',sales:'真宮 清'},
+    {timestamp:'2026/06/03 09:45',company:'九州食品株式会社',attendee1:'中村 次郎',attendee2:'小林 三郎',attendee3:'伊藤 四郎',time:'10:30',seminars:'ECサイト運用',sales:'野田 健次'},
+    {timestamp:'2026/06/04 11:30',company:'スーパーみどり',attendee1:'渡辺 五郎',attendee2:'',attendee3:'',time:'15:00',seminars:'SNS運用',sales:'山本 和寛'},
+    {timestamp:'2026/06/05 16:02',company:'大和フード',attendee1:'佐藤 六郎',attendee2:'高橋 七子',attendee3:'',time:'13:30',seminars:'ECサイト運用、SNS運用',sales:'黒川 祐司'},
+    {timestamp:'2026/06/06 08:55',company:'マルイチ青果',attendee1:'松本 八郎',attendee2:'',attendee3:'',time:'11:00',seminars:'ECサイト運用',sales:'わからない'},
+    {timestamp:'2026/06/07 13:20',company:'博多商事株式会社',attendee1:'井上 九子',attendee2:'木村 十郎',attendee3:'',time:'14:30',seminars:'SNS運用',sales:'上野 瑠久'},
+    {timestamp:'2026/06/08 10:10',company:'さが有機農業',attendee1:'林 一花',attendee2:'',attendee3:'',time:'16:00',seminars:'ECサイト運用',sales:'真宮 清'},
+  ];
+  render();
+  document.getElementById('last-updated').textContent = 'デモデータ';
+}
+
+function render() { renderKPI(); renderSalesChart(); renderTimeChart(); renderTable(); }
+
+function renderKPI() {
+  var t=allData.length;
+  var sns=allData.filter(function(d){return d.seminars&&d.seminars.indexOf('SNS')>=0;}).length;
+  var ec=allData.filter(function(d){return d.seminars&&d.seminars.indexOf('EC')>=0;}).length;
+  var att=allData.reduce(function(s,d){return s+[d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).length;},0);
+  document.getElementById('kpi-total').textContent=t;
+  var goal=30;
+  var pct=Math.min(t/goal*100,100);
+  document.getElementById('kpi-progress-bar').style.width=pct+'%';
+  document.getElementById('kpi-progress-bar').style.background=t>=goal?'#059669':'#7B2228';
+  document.getElementById('kpi-progress-text').textContent=t>=goal?'🎉 目標達成！':'目標まであと '+(goal-t)+' 社';
+  document.getElementById('kpi-sns').textContent=sns;
+  var compGoal=30,attGoal2=50;
+  var compPct=Math.min(Math.round(t/compGoal*100),100);
+  var attPct2=Math.min(Math.round(att/attGoal2*100),100);
+  document.getElementById('gauge-company').textContent=t;
+  document.getElementById('gauge-company-pct').textContent=compPct+'%';
+  document.getElementById('gauge-company-pct').style.color=t>=compGoal?'#059669':'#7B2228';
+  document.getElementById('gauge-company-bar').style.width=compPct+'%';
+  document.getElementById('gauge-company-bar').style.background=t>=compGoal?'#059669':'#7B2228';
+  document.getElementById('gauge-company-msg').style.color=t>=compGoal?'#059669':'#d97706';
+  document.getElementById('gauge-company-msg').textContent=t>=compGoal?'🎉 目標達成！おめでとうございます！':'目標まであと '+(compGoal-t)+' 社';
+  document.getElementById('gauge-att').textContent=att;
+  document.getElementById('gauge-att-pct').textContent=attPct2+'%';
+  document.getElementById('gauge-att-pct').style.color=att>=attGoal2?'#059669':'#2563eb';
+  document.getElementById('gauge-att-bar').style.width=attPct2+'%';
+  document.getElementById('gauge-att-bar').style.background=att>=attGoal2?'#059669':'#2563eb';
+  document.getElementById('gauge-att-msg').style.color=att>=attGoal2?'#059669':'#d97706';
+  document.getElementById('gauge-att-msg').textContent=att>=attGoal2?'🎉 目標達成！おめでとうございます！':'目標まであと '+(attGoal2-att)+' 名';
+  document.getElementById('kpi-ec').textContent=ec;
+  document.getElementById('kpi-attendees').textContent=att;
+  var attGoal=50;
+  var attPct=Math.min(att/attGoal*100,100);
+  document.getElementById('kpi-att-progress-bar').style.width=attPct+'%';
+  document.getElementById('kpi-att-progress-text').textContent=att>=attGoal?'🎉 目標達成！':'目標まであと '+(attGoal-att)+' 名';
+}
+
+function renderSalesChart() {
+  var sales=['真宮 清','山本 和寛','野田 健次','黒川 祐司','上野 瑠久','わからない'];
+  var colors=['#dc2626','#2563eb','#7c3aed','#059669','#d97706','#9ca3af'];
+  var counts=sales.map(function(s){return allData.filter(function(d){return d.sales===s;}).length;});
+  var max=Math.max.apply(null,counts)||1;
+  document.getElementById('sales-chart').innerHTML=sales.map(function(s,i){
+    return '<div class="bar-row"><div class="bar-label">'+s+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(counts[i]/max*100)+'%;background:'+colors[i]+'"></div></div><div class="bar-count">'+counts[i]+'</div></div>';
+  }).join('');
+}
+
+function renderTimeChart() {
+  var slots=['10:00','10:30','11:00','12:00','13:00','13:30','14:00','14:30','15:00','15:30','16:00','17:00'];
+  var counts=slots.map(function(t){return allData.filter(function(d){return d.time===t;}).length;});
+  var max=Math.max.apply(null,counts)||1;
+  var html=slots.map(function(t,i){
+    if(!counts[i])return '';
+    return '<div class="tl-row"><div class="tl-time">'+t+'</div><div class="tl-track"><div class="tl-fill" style="width:'+(counts[i]/max*100)+'%"></div></div><div class="tl-count">'+counts[i]+'件</div></div>';
+  }).filter(Boolean).join('');
+  document.getElementById('time-chart').innerHTML=html||'<div class="no-data">データなし</div>';
+}
+
+function renderTable() {
+  var q=document.getElementById('search').value.toLowerCase();
+  var fs=document.getElementById('filter-sales').value;
+  var fsem=document.getElementById('filter-seminar').value;
+  var filtered=allData.filter(function(d){
+    var mq=!q||(d.company||'').toLowerCase().indexOf(q)>=0||[d.attendee1,d.attendee2,d.attendee3].some(function(a){return a&&a.toLowerCase().indexOf(q)>=0;});
+    return mq&&(!fs||d.sales===fs)&&(!fsem||(d.seminars||'').indexOf(fsem)>=0);
+  });
+  filtered.sort(function(a,b){var av=a[sortKey]||'',bv=b[sortKey]||'';return av<bv?-sortDir:av>bv?sortDir:0;});
+  window._currentFiltered=filtered;
+  document.getElementById('table-count').textContent=filtered.length+' 件';
+  if(!filtered.length){document.getElementById('table-body').innerHTML='<tr><td colspan="7" class="no-data">該当するデータがありません</td></tr>';return;}
+  document.getElementById('table-body').innerHTML=filtered.map(function(d,i){
+    var atts=[d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();});
+    var tags=(d.seminars||'').split('、').filter(Boolean).map(function(s){return '<span class="tag '+(s.indexOf('SNS')>=0?'tag-sns':'tag-ec')+'">'+s+'</span>';}).join('');
+    return '<tr>'+
+      '<td style="color:var(--text-hint);font-size:0.7rem;">'+(i+1)+'<br>'+(d.timestamp||'')+'</td>'+
+      '<td class="company">'+(d.company||'—')+'</td>'+
+      '<td><div class="att-wrap"><div class="att-badge">'+atts.length+'</div><span style="font-size:0.78rem;">'+(atts[0]||'—')+(atts.length>1?' 他':'')+'</span></div></td>'+
+      '<td class="time">'+(d.time||'—')+'</td>'+
+      '<td>'+(tags||'—')+'</td>'+
+      '<td>'+salesTag(d.sales)+'</td>'+
+      '<td><button onclick="cancelRow('+i+')" style="padding:4px 10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;color:#dc2626;font-size:0.7rem;font-weight:600;cursor:pointer;font-family:inherit;" onmouseover="this.style.background=\'#fee2e2\'" onmouseout="this.style.background=\'#fef2f2\'">キャンセル</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function cancelRow(index) {
+  var filtered=window._currentFiltered||[];
+  var row=filtered[index];
+  if(!row)return;
+  var msg='【'+row.company+'】'+row.attendee1+' 様の申し込みをキャンセルしますか？\nこの操作は元に戻せません。';
+  if(!confirm(msg))return;
+  var idx=allData.indexOf(row);
+  if(idx>=0){allData.splice(idx,1);render();}
+}
+
+var salesColors={
+  '真宮 清':{bg:'#fee2e2',color:'#dc2626',border:'#fca5a5'},
+  '山本 和寛':{bg:'#dbeafe',color:'#2563eb',border:'#93c5fd'},
+  '野田 健次':{bg:'#ede9fe',color:'#7c3aed',border:'#c4b5fd'},
+  '黒川 祐司':{bg:'#d1fae5',color:'#059669',border:'#6ee7b7'},
+  '上野 瑠久':{bg:'#fef3c7',color:'#d97706',border:'#fcd34d'},
+  'わからない':{bg:'#f3f4f6',color:'#9ca3af',border:'#d1d5db'}
+};
+function salesTag(name){
+  if(!name)return '<span style="color:var(--text-hint);font-size:0.72rem;">未選択</span>';
+  var c=salesColors[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+  return '<span style="display:inline-flex;align-items:center;padding:3px 10px;background:'+c.bg+';border:1px solid '+c.border+';border-radius:20px;font-size:0.7rem;font-weight:600;color:'+c.color+';">'+name+'</span>';
+}
+function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderTable();}
+
+function downloadExcel(){
+  if(!allData.length){alert('データがありません');return;}
+  var headers=['受付日時','企業名','来場者1','来場者2','来場者3','来場予定時間','参加セミナー','担当営業'];
+  var rows=allData.map(function(d){return[d.timestamp||'',d.company||'',d.attendee1||'',d.attendee2||'',d.attendee3||'',d.time||'',d.seminars||'',d.sales||''];});
+  var bom='\uFEFF';
+  var csv=bom+[headers].concat(rows).map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='佐賀ソリューションフェア2026_申込一覧.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+loadData();
+</script>
+</body>
+</html>
