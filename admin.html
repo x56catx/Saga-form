@@ -8,76 +8,231 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --bg: #f5f5f7; --white: #ffffff; --border: #e5e7eb; --border2: #d1d5db; --red: #7B2228; --red-light: #fef2f2; --text: #111827; --text-sub: #6b7280; --text-hint: #9ca3af; --blue: #2563eb; --blue-light: #eff6ff; --purple: #7c3aed; --purple-light: #f5f3ff; --green: #059669; --green-light: #ecfdf5; }
+:root {
+  --bg: #f4f5f7;
+  --white: #ffffff;
+  --border: #e5e7eb;
+  --border2: #d1d5db;
+  --red: #7B2228;
+  --red2: #9b2c2c;
+  --red-light: #fff5f5;
+  --text: #111827;
+  --text-sub: #6b7280;
+  --text-hint: #9ca3af;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --purple: #7c3aed;
+  --purple-light: #f5f3ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --orange: #d97706;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.07);
+}
 body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-.header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.header-badge { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; padding: 4px 12px; border-radius: 4px; }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.refresh-btn { display: flex; align-items: center; gap: 6px; padding: 7px 16px; border: 1px solid var(--border2); border-radius: 8px; color: var(--text-sub); font-size: 0.75rem; cursor: pointer; background: white; font-weight: 600; }
-.refresh-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
-.main { padding: 1.75rem 2rem 4rem; max-width: 1400px; margin: 0 auto; }
-.summary-panel { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-.summary-label { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); display: flex; justify-content: space-between; margin-bottom: 8px; }
-.summary-bar-bg { height: 16px; background: var(--bg); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
-.summary-bar-fill { height: 100%; transition: width 1s; border-radius: 8px; }
-.sales-target-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 1.75rem; }
-.target-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.target-name { font-size: 1rem; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
-.target-row { margin-bottom: 10px; }
-.target-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-sub); margin-bottom: 4px; font-weight: 600; }
-.target-bar-bg { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
-.target-bar-fill { height: 100%; transition: 1s; }
-.panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.panel-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: #fafafa; }
-.search-input { padding: 7px 12px; border: 1px solid var(--border2); border-radius: 8px; font-size: 0.78rem; min-width: 220px; outline: none; }
-.filter-select { padding: 7px 12px; border: 1px solid var(--border2); border-radius: 8px; font-size: 0.78rem; outline: none; }
+
+/* ── Header ── */
+.header {
+  background: var(--red);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 8px rgba(123,34,40,0.3);
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.9); }
+.header-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.3); }
+.header-title { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.8); }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.last-updated { font-size: 0.7rem; color: rgba(255,255,255,0.55); margin-right: 4px; }
+.btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.12);
+  color: white;
+  transition: all 0.15s;
+}
+.btn:hover { background: rgba(255,255,255,0.22); }
+.btn-green { background: rgba(5,150,105,0.85); border-color: rgba(5,150,105,0.5); }
+.btn-green:hover { background: rgba(5,150,105,1); }
+
+/* ── Main ── */
+.main { padding: 1.5rem 2rem 4rem; max-width: 1400px; margin: 0 auto; }
+
+/* ── Summary ── */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1.5rem; }
+.summary-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.4rem 1.6rem;
+  box-shadow: var(--shadow-sm);
+}
+.summary-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
+.summary-numbers { display: flex; align-items: baseline; gap: 6px; }
+.summary-val { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+.summary-val.red { color: var(--red); }
+.summary-val.green { color: var(--green); }
+.summary-goal { font-size: 0.85rem; color: var(--text-hint); }
+.summary-pct {
+  font-size: 1.1rem; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.summary-pct.red { background: var(--red-light); color: var(--red); }
+.summary-pct.green { background: var(--green-light); color: var(--green); }
+.summary-label { font-size: 0.72rem; color: var(--text-hint); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+.progress-track { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+.summary-msg { font-size: 0.75rem; font-weight: 600; }
+
+/* ── Sales targets ── */
+.section-title { font-size: 0.75rem; font-weight: 700; color: var(--text-hint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.sales-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.sales-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+.sales-name { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.sales-achieved { font-size: 0.62rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; background: var(--green-light); color: var(--green); }
+.target-row { margin-bottom: 8px; }
+.target-lbl { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-hint); margin-bottom: 4px; font-weight: 600; }
+.target-track { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.target-fill { height: 100%; border-radius: 3px; transition: width 1s; }
+
+/* ── Table Panel ── */
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.panel-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #fafafa; }
+.panel-title { font-size: 0.85rem; font-weight: 700; }
+.count-badge { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.7rem; font-weight: 700; color: var(--text-sub); }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--border); }
+.search-input {
+  padding: 7px 12px; border: 1px solid var(--border2);
+  border-radius: 8px; font-size: 0.78rem; min-width: 220px;
+  outline: none; font-family: inherit;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--red); }
+.filter-select {
+  padding: 7px 12px; border: 1px solid var(--border2);
+  border-radius: 8px; font-size: 0.78rem;
+  outline: none; font-family: inherit; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.filter-select:focus { border-color: var(--red); }
+
 table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-th { padding: 12px 16px; text-align: left; background: #fafafa; color: var(--text-hint); border-bottom: 1px solid var(--border); }
-td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-.btn-cancel { padding: 5px 10px; background: #fff1f2; border: 1px solid #fecaca; border-radius: 6px; color: #e11d48; font-size: 0.7rem; font-weight: 700; cursor: pointer; }
-.btn-cancel:disabled { opacity: 0.5; cursor: not-allowed; }
-.loading { text-align: center; padding: 3rem; color: var(--text-hint); }
+thead th {
+  padding: 10px 16px; text-align: left;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text-hint); text-transform: uppercase;
+  border-bottom: 1px solid var(--border); background: #fafafa;
+  white-space: nowrap;
+}
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:hover { background: #fafafa; }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 13px 16px; color: var(--text-sub); white-space: nowrap; }
+td.company { color: var(--text); font-weight: 700; }
+td.time-cell { color: var(--red); font-weight: 700; font-size: 0.9rem; }
+
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; margin-right: 3px; }
+.tag-sns { background: #fefce8; color: #ca8a04; border: 1px solid #fde68a; }
+.tag-ec { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+
+.sales-tag { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+
+.btn-cancel {
+  padding: 4px 10px;
+  background: #fff1f2; border: 1px solid #fecaca;
+  border-radius: 6px; color: #e11d48;
+  font-size: 0.68rem; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: background 0.1s;
+}
+.btn-cancel:hover { background: #ffe4e6; }
+.btn-cancel:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.no-data { text-align: center; padding: 3rem; color: var(--text-hint); font-size: 0.82rem; }
+
+@media (max-width: 900px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .sales-grid { grid-template-columns: repeat(2,1fr); }
+  .main { padding: 1rem; }
+  .header { padding: 0 1rem; }
+}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="header-left">
-    <span class="header-badge">TOSHIBA TEC</span>
-    <span style="font-size: 0.85rem; color: var(--text-sub); font-weight: 600;">佐賀ソリューションフェア 2026 管理画面</span>
+    <span class="header-logo">TOSHIBA TEC</span>
+    <div class="header-divider"></div>
+    <span class="header-title">佐賀ソリューションフェア 2026　管理画面</span>
   </div>
   <div class="header-right">
-    <span id="last-updated" style="font-size:0.7rem; color:var(--text-hint);">—</span>
-    <button class="refresh-btn" onclick="loadData()">更新</button>
-    <button class="refresh-btn" onclick="downloadExcel()" style="background:#f0fdf4; border-color:#bbf7d0; color:#059669;">Excelダウンロード</button>
+    <span class="last-updated" id="last-updated">—</span>
+    <button class="btn" onclick="loadData()">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 2.5v2.5H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      更新
+    </button>
+    <button class="btn btn-green" onclick="downloadExcel()">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Excelダウンロード
+    </button>
   </div>
 </div>
 
 <div class="main">
-  <div class="summary-panel">
-    <div class="summary-item">
-      <div class="summary-label"><span>全体 申し込み社数</span><span id="total-comp-pct">0%</span></div>
-      <div class="summary-bar-bg"><div id="total-comp-bar" class="summary-bar-fill" style="background: var(--red); width:0%;"></div></div>
-      <div style="font-size: 1.2rem; font-weight:700;"><span id="total-comp-val">0</span> / 30 社</div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">申し込み社数　目標進捗</div>
+      <div class="summary-top">
+        <div class="summary-numbers">
+          <span class="summary-val red" id="total-comp-val">0</span>
+          <span class="summary-goal">/ 30 社</span>
+        </div>
+        <span class="summary-pct red" id="total-comp-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="total-comp-bar" style="background:var(--red);width:0%"></div>
+      </div>
+      <div class="summary-msg" id="total-comp-msg" style="color:var(--orange);">—</div>
     </div>
-    <div class="summary-item">
-      <div class="summary-label"><span>全体 来場予定人数</span><span id="total-att-pct">0%</span></div>
-      <div class="summary-bar-bg"><div id="total-att-bar" class="summary-bar-fill" style="background: var(--green); width:0%;"></div></div>
-      <div style="font-size: 1.2rem; font-weight:700;"><span id="total-att-val">0</span> / 50 名</div>
+    <div class="summary-card">
+      <div class="summary-label">来場予定人数　目標進捗</div>
+      <div class="summary-top">
+        <div class="summary-numbers">
+          <span class="summary-val green" id="total-att-val">0</span>
+          <span class="summary-goal">/ 50 名</span>
+        </div>
+        <span class="summary-pct green" id="total-att-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="total-att-bar" style="background:var(--green);width:0%"></div>
+      </div>
+      <div class="summary-msg" id="total-att-msg" style="color:var(--orange);">—</div>
     </div>
   </div>
 
-  <h3 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text);">担当者別 目標達成率</h3>
-  <div class="sales-target-grid" id="sales-targets"></div>
+  <div class="section-title">担当者別　目標達成率</div>
+  <div class="sales-grid" id="sales-targets"></div>
+
+  <div class="section-title">セミナー別　申し込み状況</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;" id="seminar-cards"></div>
 
   <div class="panel">
     <div class="panel-header">
-      <span style="font-weight:700;">最新申し込み一覧 (開催日: 2026/07/08)</span>
-      <span id="table-count" style="font-size: 0.7rem; font-weight: 700; color: var(--text-hint); background: var(--bg); padding: 3px 10px; border-radius: 12px;">0 件</span>
+      <span class="panel-title">申し込み一覧</span>
+      <span class="count-badge" id="table-count">0 件</span>
     </div>
     <div class="filters">
-      <input class="search-input" type="text" id="search" placeholder="🔍 企業名・来場者名で検索..." oninput="renderTable()" />
+      <input class="search-input" type="text" id="search" placeholder="🔍　企業名・来場者名で検索..." oninput="renderTable()" />
       <select class="filter-select" id="filter-sales" onchange="renderTable()">
         <option value="">すべての担当営業</option>
         <option>真宮 清</option><option>山本 和寛</option><option>野田 健次</option>
@@ -88,13 +243,21 @@ td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
         <option>ECサイト運用</option><option>SNS運用</option>
       </select>
     </div>
-    <div style="overflow-x: auto;">
+    <div style="overflow-x:auto;">
       <table>
         <thead>
-          <tr><th>受付</th><th>企業名</th><th>来場者</th><th style="color:var(--red);">来場時間</th><th>セミナー</th><th>担当営業</th><th>操作</th></tr>
+          <tr>
+            <th>受付日時</th>
+            <th>企業名</th>
+            <th>来場者</th>
+            <th>来場時間</th>
+            <th>セミナー</th>
+            <th>担当営業</th>
+            <th>操作</th>
+          </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="7" class="loading">同期中...</td></tr>
+          <tr><td colspan="7" class="no-data">同期中...</td></tr>
         </tbody>
       </table>
     </div>
@@ -103,14 +266,27 @@ td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
 
 <script>
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec';
+
 var TARGET_CONFIG = {
-  '山本 和寛': { comp: 10, att: 15 }, '野田 健次': { comp: 10, att: 15 },
-  '上野 瑠久': { comp: 5, att: 10 }, '黒川 祐司': { comp: 5, att: 10 },
-  '真宮 清':   { comp: 5, att: 10 }, 'わからない': { comp: 5, att: 10 }
+  '山本 和寛': {comp:10, att:15, color:'#2563eb'},
+  '野田 健次': {comp:10, att:15, color:'#7c3aed'},
+  '上野 瑠久': {comp:5,  att:10, color:'#d97706'},
+  '黒川 祐司': {comp:5,  att:10, color:'#059669'},
+  '真宮 清':   {comp:5,  att:10, color:'#dc2626'},
+  'わからない':{comp:5,  att:10, color:'#9ca3af'}
 };
+
+var SALES_COLORS = {
+  '真宮 清':   {bg:'#fee2e2',color:'#dc2626',border:'#fca5a5'},
+  '山本 和寛': {bg:'#dbeafe',color:'#2563eb',border:'#93c5fd'},
+  '野田 健次': {bg:'#ede9fe',color:'#7c3aed',border:'#c4b5fd'},
+  '黒川 祐司': {bg:'#d1fae5',color:'#059669',border:'#6ee7b7'},
+  '上野 瑠久': {bg:'#fef3c7',color:'#d97706',border:'#fcd34d'},
+  'わからない':{bg:'#f3f4f6',color:'#9ca3af',border:'#d1d5db'}
+};
+
 var allData = [];
 
-// ★時間から「1899年〜」などを消して「HH:mm」だけを綺麗に抜き出す関数
 function formatTimeOnly(raw) {
   if (!raw) return '—';
   var str = String(raw);
@@ -119,39 +295,130 @@ function formatTimeOnly(raw) {
 }
 
 function loadData() {
-  fetch(SCRIPT_URL + '?action=get').then(r => r.json()).then(d => {
-    allData = Array.isArray(d) ? d : [];
-    render();
-    document.getElementById('last-updated').textContent = '最終同期: ' + new Date().toLocaleTimeString();
-  });
+  fetch(SCRIPT_URL + '?action=get')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      allData = Array.isArray(d) ? d : [];
+      render();
+      document.getElementById('last-updated').textContent = '最終更新: ' + new Date().toLocaleTimeString('ja-JP');
+    })
+    .catch(function(){
+      useDemoData();
+    });
+}
+
+function useDemoData() {
+  allData = [
+    {timestamp:'10:23',company:'株式会社サンプル商事',attendee1:'田中 太郎',attendee2:'鈴木 花子',attendee3:'',time:'13:00',seminars:'ECサイト運用、SNS運用',sales:'上野 瑠久',rowNumber:2},
+    {timestamp:'11:05',company:'フレッシュマート佐賀',attendee1:'山田 一郎',attendee2:'',attendee3:'',time:'14:00',seminars:'SNS運用',sales:'真宮 清',rowNumber:3},
+    {timestamp:'11:30',company:'九州食品株式会社',attendee1:'中村 次郎',attendee2:'小林 三郎',attendee3:'伊藤 四郎',time:'10:30',seminars:'ECサイト運用',sales:'野田 健次',rowNumber:4},
+    {timestamp:'12:10',company:'スーパーみどり',attendee1:'渡辺 五郎',attendee2:'',attendee3:'',time:'15:00',seminars:'SNS運用',sales:'山本 和寛',rowNumber:5},
+    {timestamp:'13:02',company:'大和フード',attendee1:'佐藤 六郎',attendee2:'高橋 七子',attendee3:'',time:'13:30',seminars:'ECサイト運用、SNS運用',sales:'黒川 祐司',rowNumber:6},
+    {timestamp:'13:55',company:'マルイチ青果',attendee1:'松本 八郎',attendee2:'',attendee3:'',time:'11:00',seminars:'ECサイト運用',sales:'わからない',rowNumber:7},
+    {timestamp:'14:20',company:'博多商事株式会社',attendee1:'井上 九子',attendee2:'木村 十郎',attendee3:'',time:'14:30',seminars:'SNS運用',sales:'上野 瑠久',rowNumber:8},
+    {timestamp:'15:10',company:'さが有機農業',attendee1:'林 一花',attendee2:'',attendee3:'',time:'16:00',seminars:'ECサイト運用',sales:'真宮 清',rowNumber:9},
+    {timestamp:'15:45',company:'佐賀流通センター',attendee1:'村上 健',attendee2:'',attendee3:'',time:'13:00',seminars:'ECサイト運用、SNS運用',sales:'山本 和寛',rowNumber:10},
+    {timestamp:'16:00',company:'九州リテール',attendee1:'坂本 誠',attendee2:'長谷川 みき',attendee3:'',time:'15:00',seminars:'SNS運用',sales:'野田 健次',rowNumber:11},
+    {timestamp:'16:30',company:'ハーモニーストア',attendee1:'吉田 豊',attendee2:'',attendee3:'',time:'14:00',seminars:'ECサイト運用',sales:'黒川 祐司',rowNumber:12},
+    {timestamp:'17:00',company:'グリーンマーケット',attendee1:'中島 光',attendee2:'橋本 恵',attendee3:'田村 誠',time:'13:30',seminars:'ECサイト運用、SNS運用',sales:'山本 和寛',rowNumber:13},
+  ];
+  render();
+  document.getElementById('last-updated').textContent = 'デモデータ表示中';
 }
 
 function render() {
-  var tComp = allData.length, tAtt = allData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
-  updateSummary('comp', tComp, 30); updateSummary('att', tAtt, 50);
-  renderSalesTargets(); renderTable();
+  var tComp = allData.length;
+  var tAtt = allData.reduce(function(s,d){
+    return s + [d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).length;
+  }, 0);
+  updateSummary('comp', tComp, 30, 'red');
+  updateSummary('att', tAtt, 50, 'green');
+  renderSalesTargets();
+  renderSeminarCards();
+  renderTable();
 }
 
-function updateSummary(type, val, goal) {
-  var pct = Math.min(Math.round((val / goal) * 100), 100);
-  document.getElementById(`total-${type}-val`).textContent = val;
-  document.getElementById(`total-${type}-pct`).textContent = pct + '%';
-  document.getElementById(`total-${type}-bar`).style.width = pct + '%';
+function updateSummary(type, val, goal, color) {
+  var pct = Math.min(Math.round((val/goal)*100), 100);
+  var achieved = val >= goal;
+  document.getElementById('total-'+type+'-val').textContent = val;
+  document.getElementById('total-'+type+'-pct').textContent = pct + '%';
+  document.getElementById('total-'+type+'-bar').style.width = pct + '%';
+  document.getElementById('total-'+type+'-bar').style.background = achieved ? '#059669' : (color === 'red' ? '#7B2228' : '#059669');
+  document.getElementById('total-'+type+'-msg').textContent = achieved
+    ? '🎉 目標達成！おめでとうございます！'
+    : '目標まであと ' + (goal - val) + (type === 'comp' ? ' 社' : ' 名');
+  document.getElementById('total-'+type+'-msg').style.color = achieved ? '#059669' : '#d97706';
 }
 
 function renderSalesTargets() {
-  var html = '';
-  Object.keys(TARGET_CONFIG).forEach(name => {
-    var conf = TARGET_CONFIG[name], myData = allData.filter(d => d.sales === name);
-    var actComp = myData.length, actAtt = myData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
-    var pctC = Math.min(Math.round((actComp/conf.comp)*100), 100), pctA = Math.min(Math.round((actAtt/conf.att)*100), 100);
-    html += `<div class="target-card"><div class="target-name">${name}</div>
-      <div class="target-row"><div class="target-label"><span>社数 (${pctC}%)</span><span>${actComp}/${conf.comp}</span></div>
-      <div class="target-bar-bg"><div style="width:${pctC}%; background:${pctC >= 100 ? 'var(--green)' : 'var(--red)'};" class="target-bar-fill"></div></div></div>
-      <div class="target-row"><div class="target-label"><span>人数 (${pctA}%)</span><span>${actAtt}/${conf.att}</span></div>
-      <div class="target-bar-bg"><div style="width:${pctA}%; background:${pctA >= 100 ? 'var(--green)' : 'var(--blue)'};" class="target-bar-fill"></div></div></div></div>`;
-  });
+  var html = Object.keys(TARGET_CONFIG).map(function(name) {
+    var conf = TARGET_CONFIG[name];
+    var myData = allData.filter(function(d){return d.sales === name;});
+    var actComp = myData.length;
+    var actAtt = myData.reduce(function(s,d){
+      return s + [d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).length;
+    }, 0);
+    var pctC = Math.min(Math.round((actComp/conf.comp)*100), 100);
+    var pctA = Math.min(Math.round((actAtt/conf.att)*100), 100);
+    var allAchieved = pctC >= 100 && pctA >= 100;
+    return '<div class="sales-card">' +
+      '<div class="sales-name" style="color:'+conf.color+';">' + name +
+        (allAchieved ? '<span class="sales-achieved">達成！</span>' : '') +
+      '</div>' +
+      '<div class="target-row">' +
+        '<div class="target-lbl"><span>社数</span><span>' + actComp + '/' + conf.comp + '　' + pctC + '%</span></div>' +
+        '<div class="target-track"><div class="target-fill" style="width:'+pctC+'%;background:'+(pctC>=100?'#059669':conf.color)+';"></div></div>' +
+      '</div>' +
+      '<div class="target-row">' +
+        '<div class="target-lbl"><span>人数</span><span>' + actAtt + '/' + conf.att + '　' + pctA + '%</span></div>' +
+        '<div class="target-track"><div class="target-fill" style="width:'+pctA+'%;background:'+(pctA>=100?'#059669':'#2563eb')+';"></div></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
   document.getElementById('sales-targets').innerHTML = html;
+}
+
+function renderSeminarCards() {
+  var ecData = allData.filter(function(d){return (d.seminars||'').indexOf('EC')>=0;});
+  var snsData = allData.filter(function(d){return (d.seminars||'').indexOf('SNS')>=0;});
+
+  function countAtt(arr) {
+    return arr.reduce(function(s,d){
+      return s + [d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).length;
+    }, 0);
+  }
+
+  var seminars = [
+    {name:'ECサイト運用', time:'13:30〜', data:ecData, color:'#0891b2', bg:'#ecfeff', border:'#a5f3fc'},
+    {name:'SNS運用',      time:'15:00〜', data:snsData, color:'#ca8a04', bg:'#fefce8', border:'#fde68a'}
+  ];
+
+  document.getElementById('seminar-cards').innerHTML = seminars.map(function(s){
+    var comp = s.data.length;
+    var att = countAtt(s.data);
+    var salesBreakdown = Object.keys(TARGET_CONFIG).map(function(name){
+      var cnt = s.data.filter(function(d){return d.sales===name;}).length;
+      if(!cnt) return '';
+      var sc = SALES_COLORS[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+      return '<span style="display:inline-flex;align-items:center;padding:2px 8px;background:'+sc.bg+';border:1px solid '+sc.border+';border-radius:12px;font-size:0.65rem;font-weight:700;color:'+sc.color+';margin:2px;">'+name+'&nbsp;'+cnt+'社</span>';
+    }).filter(Boolean).join('');
+
+    return '<div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.6rem;box-shadow:var(--shadow-sm);border-top:3px solid '+s.color+';">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
+        '<div>' +
+          '<div style="font-size:0.7rem;color:var(--text-hint);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">'+s.name+'</div>' +
+          '<div style="font-size:0.72rem;color:'+s.color+';font-weight:600;background:'+s.bg+';border:1px solid '+s.border+';padding:2px 8px;border-radius:10px;display:inline-block;">'+s.time+'</div>' +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<div style="font-size:2rem;font-weight:700;color:'+s.color+';line-height:1;">'+comp+'</div>' +
+          '<div style="font-size:0.72rem;color:var(--text-hint);">社　'+att+'名</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:0.72rem;color:var(--text-sub);font-weight:600;margin-bottom:6px;">担当別内訳</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:2px;">'+salesBreakdown+'</div>' +
+    '</div>';
+  }).join('');
 }
 
 function renderTable() {
@@ -159,66 +426,59 @@ function renderTable() {
   var fs = document.getElementById('filter-sales').value;
   var fsem = document.getElementById('filter-seminar').value;
 
-  var filtered = allData.filter(d => {
-    var mq = !q || (d.company||'').toLowerCase().indexOf(q)>=0 || [d.attendee1, d.attendee2, d.attendee3].some(a => a && a.toLowerCase().indexOf(q)>=0);
-    return mq && (!fs || d.sales === fs) && (!fsem || (d.seminars||'').indexOf(fsem)>=0);
+  var filtered = allData.filter(function(d){
+    var mq = !q || (d.company||'').toLowerCase().indexOf(q)>=0 ||
+      [d.attendee1,d.attendee2,d.attendee3].some(function(a){return a&&a.toLowerCase().indexOf(q)>=0;});
+    return mq && (!fs||d.sales===fs) && (!fsem||(d.seminars||'').indexOf(fsem)>=0);
   });
 
   document.getElementById('table-count').textContent = filtered.length + ' 件';
 
-  if (filtered.length === 0) {
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">該当するデータがありません</td></tr>';
+  if (!filtered.length) {
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="no-data">該当するデータがありません</td></tr>';
     return;
   }
 
-  document.getElementById('table-body').innerHTML = filtered.map(d => `
-    <tr>
-      <td style="color:var(--text-hint); font-size:0.7rem;">${formatTimeOnly(d.timestamp)}</td>
-      <td style="font-weight:700;">${d.company}</td>
-      <td>${d.attendee1}${d.attendee2 ? ' 他' : ''}</td>
-      <td style="color:var(--red); font-weight:700; font-size: 1rem;">${formatTimeOnly(d.time)}</td>
-      <td>${d.seminars}</td>
-      <td>${d.sales}</td>
-      <td><button class="btn-cancel" onclick="cancelRow(${d.rowNumber}, this)">キャンセル</button></td>
-    </tr>`).join('');
+  document.getElementById('table-body').innerHTML = filtered.map(function(d,i){
+    var atts = [d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();});
+    var tags = (d.seminars||'').split('、').filter(Boolean).map(function(s){
+      return '<span class="tag '+(s.indexOf('SNS')>=0?'tag-sns':'tag-ec')+'">'+s+'</span>';
+    }).join('');
+    var sc = SALES_COLORS[d.sales] || {bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+    var salesTag = '<span class="sales-tag" style="background:'+sc.bg+';border:1px solid '+sc.border+';color:'+sc.color+';">'+(d.sales||'未選択')+'</span>';
+    return '<tr>' +
+      '<td style="color:var(--text-hint);font-size:0.7rem;">'+formatTimeOnly(d.timestamp)+'</td>' +
+      '<td class="company">'+(d.company||'—')+'</td>' +
+      '<td style="font-size:0.78rem;">'+(atts[0]||'—')+(atts.length>1?' 他'+( atts.length-1)+'名':'')+'</td>' +
+      '<td class="time-cell">'+formatTimeOnly(d.time)+'</td>' +
+      '<td>'+(tags||'—')+'</td>' +
+      '<td>'+salesTag+'</td>' +
+      '<td><button class="btn-cancel" onclick="cancelRow('+(d.rowNumber||i)+', this)">キャンセル</button></td>' +
+    '</tr>';
+  }).join('');
 }
 
-// 完全にスプレッドシートから削除
 function cancelRow(rowNum, btn) {
-  if(!confirm('削除してよろしいですか？（スプレッドシートからも消去されます）')) return;
+  if (!confirm('削除してよろしいですか？\nスプレッドシートからも消去されます。')) return;
   btn.disabled = true; btn.textContent = '...';
-  fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', rowNumber: rowNum }) })
-  .then(() => loadData());
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({action:'delete', rowNumber:rowNum})
+  }).then(function(){loadData();});
 }
 
-// 綺麗なExcel（.xlsx）をダウンロード
-function downloadExcel(){
-  if(!allData.length){alert('データがありません');return;}
-  var headers = ['受付日時', '企業名', '来場者', '来場時間', '参加セミナー', '担当営業'];
-  
+function downloadExcel() {
+  if (!allData.length) { alert('データがありません'); return; }
+  var headers = ['受付日時','企業名','来場者','来場時間','参加セミナー','担当営業'];
   var rows = allData.map(function(d){
-    // 複数人を「、」で結合してスッキリ見せる
-    var atts = [d.attendee1, d.attendee2, d.attendee3].filter(function(a){return a && a.trim();}).join('、');
-    return [
-      formatTimeOnly(d.timestamp),
-      d.company || '',
-      atts,
-      formatTimeOnly(d.time), // Excel出力時も時間を綺麗にする
-      d.seminars || '',
-      d.sales || ''
-    ];
+    var atts = [d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).join('、');
+    return [formatTimeOnly(d.timestamp), d.company||'', atts, formatTimeOnly(d.time), d.seminars||'', d.sales||''];
   });
-  
-  var ws_data = [headers].concat(rows);
-  var ws = XLSX.utils.aoa_to_sheet(ws_data);
-  
-  // 列の幅を見やすく自動調整
-  var wscols = [{wch: 10}, {wch: 25}, {wch: 22}, {wch: 12}, {wch: 30}, {wch: 15}];
-  ws['!cols'] = wscols;
-  
+  var ws = XLSX.utils.aoa_to_sheet([headers].concat(rows));
+  ws['!cols'] = [{wch:12},{wch:25},{wch:22},{wch:10},{wch:28},{wch:14}];
   var wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "申し込み一覧");
-  XLSX.writeFile(wb, "佐賀ソリューションフェア2026_申込一覧.xlsx");
+  XLSX.utils.book_append_sheet(wb, ws, '申し込み一覧');
+  XLSX.writeFile(wb, '佐賀ソリューションフェア2026_申込一覧.xlsx');
 }
 
 window.onload = loadData;
