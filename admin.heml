@@ -260,13 +260,13 @@ td.time { color: var(--red); font-weight: 700; }
 </div>
 
 <script>
-var SCRIPT_URL = 'YOUR_SCRIPT_URL_HERE';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec';
 var allData = [];
 var sortKey = 'timestamp';
 var sortDir = 1;
 
 function loadData() {
-  if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+  if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec') {
     document.getElementById('demo-badge').style.display = 'block';
     useDemoData(); return;
   }
