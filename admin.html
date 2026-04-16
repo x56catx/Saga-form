@@ -7,166 +7,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #f5f5f7;
-  --white: #ffffff;
-  --border: #e5e7eb;
-  --border2: #d1d5db;
-  --red: #7B2228;
-  --red-light: #fef2f2;
-  --text: #111827;
-  --text-sub: #6b7280;
-  --text-hint: #9ca3af;
-  --blue: #2563eb;
-  --blue-light: #eff6ff;
-  --purple: #7c3aed;
-  --purple-light: #f5f3ff;
-  --green: #059669;
-  --green-light: #ecfdf5;
-  --orange: #d97706;
-}
+:root { --bg: #f5f5f7; --white: #ffffff; --border: #e5e7eb; --border2: #d1d5db; --red: #7B2228; --red-light: #fef2f2; --text: #111827; --text-sub: #6b7280; --text-hint: #9ca3af; --blue: #2563eb; --blue-light: #eff6ff; --purple: #7c3aed; --purple-light: #f5f3ff; --green: #059669; --green-light: #ecfdf5; }
 body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 .header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.header-left { display: flex; align-items: center; gap: 14px; }
 .header-badge { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.15em; padding: 4px 12px; border-radius: 4px; }
-.header-title { font-size: 0.85rem; font-weight: 500; color: var(--text-sub); }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.refresh-btn { display: flex; align-items: center; gap: 6px; padding: 7px 16px; background: var(--white); border: 1px solid var(--border2); border-radius: 8px; color: var(--text-sub); font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: all 0.15s; }
-.refresh-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
-.last-updated { font-size: 0.72rem; color: var(--text-hint); }
-
+.refresh-btn { display: flex; align-items: center; gap: 6px; padding: 7px 16px; border: 1px solid var(--border2); border-radius: 8px; color: var(--text-sub); font-size: 0.75rem; cursor: pointer; background: white; }
 .main { padding: 1.75rem 2rem 4rem; max-width: 1400px; margin: 0 auto; }
-
-/* 総目標サマリー */
 .summary-panel { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-.summary-item { display: flex; flex-direction: column; gap: 12px; }
-.summary-label { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); display: flex; justify-content: space-between; }
-.summary-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--text); }
-.summary-bar-bg { height: 16px; background: var(--bg); border-radius: 8px; overflow: hidden; }
-.summary-bar-fill { height: 100%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 8px; }
-.summary-stats { font-size: 0.8rem; color: var(--text-hint); display: flex; align-items: baseline; gap: 4px; }
-.summary-val { font-size: 1.8rem; font-weight: 700; color: var(--text); }
-
-/* KPI Grid */
-.kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 1.75rem; }
-.kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-.kpi-icon.blue { background: var(--blue-light); }
-.kpi-icon.purple { background: var(--purple-light); }
-
-/* 担当者別 目標 */
-.sales-target-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; margin-bottom: 1.75rem; }
-.target-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.target-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.target-row { margin-bottom: 12px; }
-.target-label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; display: flex; justify-content: space-between; margin-bottom: 4px; }
-.target-bar-bg { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
-.target-bar-fill { height: 100%; transition: width 1s ease-out; }
-
-/* Table */
-.panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.summary-label { font-size: 0.85rem; font-weight: 700; color: var(--text-sub); display: flex; justify-content: space-between; margin-bottom: 8px; }
+.summary-bar-bg { height: 16px; background: var(--bg); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.summary-bar-fill { height: 100%; transition: width 1s; border-radius: 8px; }
+.sales-target-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 1.75rem; }
+.target-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; }
+.target-name { font-size: 1rem; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
+.target-row { margin-bottom: 10px; }
+.target-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-sub); margin-bottom: 4px; }
+.target-bar-bg { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.target-bar-fill { height: 100%; transition: 1s; }
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
 .panel-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.panel-title { font-size: 0.85rem; font-weight: 700; color: var(--text); }
-.table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-thead th { padding: 12px 16px; text-align: left; font-size: 0.7rem; font-weight: 700; color: var(--text-hint); text-transform: uppercase; border-bottom: 1px solid var(--border); background: #fafafa; }
-tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-tbody tr:hover { background: #fafafa; }
-td { padding: 14px 16px; color: var(--text-sub); }
-
-.loading { display: flex; align-items: center; justify-content: center; padding: 3rem; gap: 10px; color: var(--text-hint); font-size: 0.8rem; }
-.spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-@media (max-width: 850px) {
-  .summary-panel { grid-template-columns: 1fr; }
-  .kpi-grid { grid-template-columns: 1fr; }
-}
+th { padding: 12px 16px; text-align: left; background: #fafafa; color: var(--text-hint); }
+td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.btn-cancel { padding: 5px 10px; background: #fff1f2; border: 1px solid #fecaca; border-radius: 6px; color: #e11d48; font-size: 0.7rem; font-weight: 700; cursor: pointer; }
+.loading { text-align: center; padding: 3rem; color: var(--text-hint); }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-left">
-    <span class="header-badge">TOSHIBA TEC</span>
-    <span class="header-title">佐賀ソリューションフェア 2026 — 管理画面</span>
-  </div>
-  <div class="header-right">
-    <span class="last-updated" id="last-updated">—</span>
-    <button class="refresh-btn" onclick="loadData()">更新</button>
-  </div>
+  <div class="header-left"><span class="header-badge">TOSHIBA TEC</span> <span style="font-size: 0.85rem; color: var(--text-sub);">佐賀ソリューションフェア 2026 管理画面</span></div>
+  <div class="header-right"><span id="last-updated" style="font-size:0.7rem; color:var(--text-hint);">—</span> <button class="refresh-btn" onclick="loadData()">更新</button></div>
 </div>
 
 <div class="main">
   <div class="summary-panel">
     <div class="summary-item">
-      <div class="summary-label">
-        <span>フェア全体 申し込み社数進捗</span>
-        <span class="summary-pct" id="total-comp-pct">0%</span>
-      </div>
-      <div class="summary-bar-bg">
-        <div class="summary-bar-fill" id="total-comp-bar" style="width: 0%; background: var(--red);"></div>
-      </div>
-      <div class="summary-stats">
-        <span class="summary-val" id="total-comp-val">0</span><span>/ 30 社</span>
-      </div>
+      <div class="summary-label"><span>全体 申し込み社数</span><span id="total-comp-pct">0%</span></div>
+      <div class="summary-bar-bg"><div id="total-comp-bar" class="summary-bar-fill" style="background: var(--red); width:0%;"></div></div>
+      <div style="font-size: 1.2rem; font-weight:700;"><span id="total-comp-val">0</span> / 30 社</div>
     </div>
     <div class="summary-item">
-      <div class="summary-label">
-        <span>フェア全体 来場予定人数進捗</span>
-        <span class="summary-pct" id="total-att-pct">0%</span>
-      </div>
-      <div class="summary-bar-bg">
-        <div class="summary-bar-fill" id="total-att-bar" style="width: 0%; background: var(--green);"></div>
-      </div>
-      <div class="summary-stats">
-        <span class="summary-val" id="total-att-val">0</span><span>/ 50 名</span>
-      </div>
+      <div class="summary-label"><span>全体 来場予定人数</span><span id="total-att-pct">0%</span></div>
+      <div class="summary-bar-bg"><div id="total-att-bar" class="summary-bar-fill" style="background: var(--green); width:0%;"></div></div>
+      <div style="font-size: 1.2rem; font-weight:700;"><span id="total-att-val">0</span> / 50 名</div>
     </div>
   </div>
 
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-icon blue">🛒</div>
-      <div>
-        <div style="font-size: 0.7rem; color: var(--text-hint); font-weight: 600;">ECサイト運用セミナー</div>
-        <div style="font-size: 1.5rem; font-weight: 700; color: var(--blue);" id="kpi-ec">0</div>
-        <div style="font-size: 0.7rem; color: var(--text-hint);">参加予定社数</div>
-      </div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon purple">📱</div>
-      <div>
-        <div style="font-size: 0.7rem; color: var(--text-hint); font-weight: 600;">SNS運用セミナー</div>
-        <div style="font-size: 1.5rem; font-weight: 700; color: var(--purple);" id="kpi-sns">0</div>
-        <div style="font-size: 0.7rem; color: var(--text-hint);">参加予定社数</div>
-      </div>
-    </div>
-  </div>
-
-  <h3 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; color: var(--text);">担当者別 個人目標達成率</h3>
-  <div class="sales-target-grid" id="sales-targets">
-    </div>
+  <h3 style="font-size: 0.9rem; margin-bottom: 12px;">担当者別 目標達成率</h3>
+  <div class="sales-target-grid" id="sales-targets"></div>
 
   <div class="panel">
-    <div class="panel-header">
-      <span class="panel-title">最新申し込み一覧</span>
-      <span id="table-count" style="font-size: 0.7rem; font-weight: 700; color: var(--text-hint); background: var(--bg); padding: 2px 8px; border-radius: 10px;">0 件</span>
-    </div>
-    <div class="table-wrap">
+    <div class="panel-header"><span style="font-weight:700;">最新申し込み一覧 (開催日: 2026/07/08)</span></div>
+    <div style="overflow-x: auto;">
       <table>
         <thead>
-          <tr>
-            <th>日時</th>
-            <th>企業名</th>
-            <th>来場者</th>
-            <th>来場時間</th>
-            <th>セミナー</th>
-            <th>担当営業</th>
-          </tr>
+          <tr><th>受付</th><th>企業名</th><th>来場者</th><th style="color:var(--red);">来場時間</th><th>セミナー</th><th>担当営業</th><th>操作</th></tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="6" class="loading">同期中...</td></tr>
+          <tr><td colspan="7" class="loading">同期中...</td></tr>
         </tbody>
       </table>
     </div>
@@ -175,53 +74,25 @@ td { padding: 14px 16px; color: var(--text-sub); }
 
 <script>
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec';
-
-// 目標設定
 var TARGET_CONFIG = {
-  '山本 和寛': { comp: 10, att: 15 },
-  '野田 健次': { comp: 10, att: 15 },
-  '上野 瑠久': { comp: 5, att: 10 },
-  '黒川 祐司': { comp: 5, att: 10 },
-  '真宮 清':   { comp: 5, att: 10 },
-  'わからない': { comp: 5, att: 10 }
+  '山本 和寛': { comp: 10, att: 15 }, '野田 健次': { comp: 10, att: 15 },
+  '上野 瑠久': { comp: 5, att: 10 }, '黒川 祐司': { comp: 5, att: 10 },
+  '真宮 清':   { comp: 5, att: 10 }, 'わからない': { comp: 5, att: 10 }
 };
-
 var allData = [];
 
 function loadData() {
-  document.getElementById('table-body').innerHTML = '<tr><td colspan="6" class="loading"><div class="spinner"></div>同期中...</td></tr>';
-  fetch(SCRIPT_URL + '?action=get')
-    .then(r => r.json())
-    .then(d => {
-      allData = Array.isArray(d) ? d : [];
-      render();
-      document.getElementById('last-updated').textContent = '同期完了: ' + new Date().toLocaleTimeString();
-    })
-    .catch(e => {
-      console.error(e);
-      document.getElementById('table-body').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem; color:red;">エラー: スプレッドシートを読み込めません</td></tr>';
-    });
+  fetch(SCRIPT_URL + '?action=get').then(r => r.json()).then(d => {
+    allData = Array.isArray(d) ? d : [];
+    render();
+    document.getElementById('last-updated').textContent = '最終同期: ' + new Date().toLocaleTimeString();
+  });
 }
 
 function render() {
-  var totalComp = allData.length;
-  var totalAtt = allData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
-  var ec = allData.filter(d => d.seminars && d.seminars.indexOf('EC') >= 0).length;
-  var sns = allData.filter(d => d.seminars && d.seminars.indexOf('SNS') >= 0).length;
-
-  // 総目標
-  updateSummary('comp', totalComp, 30);
-  updateSummary('att', totalAtt, 50);
-
-  // KPI
-  document.getElementById('kpi-ec').textContent = ec;
-  document.getElementById('kpi-sns').textContent = sns;
-
-  // 担当者別
-  renderSalesTargets();
-
-  // テーブル
-  renderTable();
+  var tComp = allData.length, tAtt = allData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
+  updateSummary('comp', tComp, 30); updateSummary('att', tAtt, 50);
+  renderSalesTargets(); renderTable();
 }
 
 function updateSummary(type, val, goal) {
@@ -234,47 +105,36 @@ function updateSummary(type, val, goal) {
 function renderSalesTargets() {
   var html = '';
   Object.keys(TARGET_CONFIG).forEach(name => {
-    var conf = TARGET_CONFIG[name];
-    var myData = allData.filter(d => d.sales === name);
-    var actComp = myData.length;
-    var actAtt = myData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
-    
-    var pctComp = Math.min(Math.round((actComp / conf.comp) * 100), 100);
-    var pctAtt = Math.min(Math.round((actAtt / conf.att) * 100), 100);
-    
-    html += `
-      <div class="target-card">
-        <div class="target-name">${name}</div>
-        <div class="target-row">
-          <div class="target-label"><span>社数実績</span><span>${actComp} / ${conf.comp}</span></div>
-          <div class="target-bar-bg"><div class="target-bar-fill" style="width: ${pctComp}%; background: ${pctComp >= 100 ? 'var(--green)' : 'var(--red)'}"></div></div>
-        </div>
-        <div class="target-row">
-          <div class="target-label"><span>人数実績</span><span>${actAtt} / ${conf.att}</span></div>
-          <div class="target-bar-bg"><div class="target-bar-fill" style="width: ${pctAtt}%; background: ${pctAtt >= 100 ? 'var(--green)' : 'var(--blue)'}"></div></div>
-        </div>
-      </div>
-    `;
+    var conf = TARGET_CONFIG[name], myData = allData.filter(d => d.sales === name);
+    var actComp = myData.length, actAtt = myData.reduce((s, d) => s + [d.attendee1, d.attendee2, d.attendee3].filter(a => a && a.trim()).length, 0);
+    var pctC = Math.min(Math.round((actComp/conf.comp)*100), 100), pctA = Math.min(Math.round((actAtt/conf.att)*100), 100);
+    html += `<div class="target-card"><div class="target-name">${name}</div>
+      <div class="target-row"><div class="target-label"><span>社数 (${pctC}%)</span><span>${actComp}/${conf.comp}</span></div>
+      <div class="target-bar-bg"><div style="width:${pctC}%; background:var(--red);" class="target-bar-fill"></div></div></div>
+      <div class="target-row"><div class="target-label"><span>人数 (${pctA}%)</span><span>${actAtt}/${conf.att}</span></div>
+      <div class="target-bar-bg"><div style="width:${pctA}%; background:var(--blue);" class="target-bar-fill"></div></div></div></div>`;
   });
   document.getElementById('sales-targets').innerHTML = html;
 }
 
 function renderTable() {
-  document.getElementById('table-count').textContent = allData.length + ' 件';
-  if (allData.length === 0) {
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem;">申し込みはまだありません</td></tr>';
-    return;
-  }
-  document.getElementById('table-body').innerHTML = allData.map(d => `
+  document.getElementById('table-body').innerHTML = allData.map((d, i) => `
     <tr>
-      <td style="font-size: 0.7rem; color: var(--text-hint);">${d.timestamp}</td>
-      <td style="font-weight:700; color:var(--text);">${d.company}</td>
+      <td style="color:var(--text-hint); font-size:0.7rem;">${d.timestamp}</td>
+      <td style="font-weight:700;">${d.company}</td>
       <td>${d.attendee1}${d.attendee2 ? ' 他' : ''}</td>
-      <td style="color: var(--red); font-weight:700;">${d.time}</td>
+      <td style="color:var(--red); font-weight:700;">${d.time}</td>
       <td>${d.seminars}</td>
       <td>${d.sales}</td>
-    </tr>
-  `).join('');
+      <td><button class="btn-cancel" onclick="cancelRow(${i}, ${d.rowNumber}, this)">キャンセル</button></td>
+    </tr>`).join('');
+}
+
+function cancelRow(idx, rowNum, btn) {
+  if(!confirm('削除してよろしいですか？（スプレッドシートからも消去されます）')) return;
+  btn.disabled = true; btn.textContent = '...';
+  fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', rowNumber: rowNum }) })
+  .then(() => loadData());
 }
 
 window.onload = loadData;
