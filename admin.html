@@ -94,7 +94,7 @@ td.time { color: var(--red); font-weight: 700; }
 .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .table-count-badge { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.7rem; font-weight: 700; color: var(--text-sub); }
-.demo-badge { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 10px 16px; margin-bottom: 1.25rem; font-size: 0.75rem; color: var(--orange); display: none; }
+.demo-badge { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; padding: 10px 16px; margin-bottom: 1.25rem; font-size: 0.75rem; color: #b91c1c; display: none; }
 @media (max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2,1fr); }
   .grid2 { grid-template-columns: 1fr; }
@@ -124,7 +124,7 @@ td.time { color: var(--red); font-weight: 700; }
 </div>
 
 <div class="main">
-  <div class="demo-badge" id="demo-badge">📊 デモデータを表示しています。接続エラーが発生しています。</div>
+  <div class="demo-badge" id="demo-badge">⚠️ 接続エラーが発生しました</div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
     <div class="panel">
@@ -133,19 +133,19 @@ td.time { color: var(--red); font-weight: 700; }
           <div>
             <div style="font-size:0.7rem;color:var(--text-hint);font-weight:600;letter-spacing:0.05em;margin-bottom:3px;">申し込み社数の目標</div>
             <div style="display:flex;align-items:baseline;gap:6px;">
-              <span style="font-size:1.6rem;font-weight:700;color:var(--red);" id="gauge-company">—</span>
+              <span style="font-size:1.6rem;font-weight:700;color:var(--red);" id="gauge-company">0</span>
               <span style="font-size:0.85rem;color:var(--text-hint);">/ 30社</span>
             </div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:0.72rem;color:var(--text-hint);margin-bottom:3px;">達成率</div>
-            <div style="font-size:1.4rem;font-weight:700;" id="gauge-company-pct">—%</div>
+            <div style="font-size:1.4rem;font-weight:700;" id="gauge-company-pct">0%</div>
           </div>
         </div>
         <div style="background:var(--bg);border-radius:8px;height:14px;overflow:hidden;margin-bottom:8px;">
           <div id="gauge-company-bar" style="height:100%;border-radius:8px;background:var(--red);transition:width 1s cubic-bezier(0.4,0,0.2,1);width:0%;"></div>
         </div>
-        <div style="font-size:0.75rem;font-weight:600;" id="gauge-company-msg">—</div>
+        <div style="font-size:0.75rem;font-weight:600;" id="gauge-company-msg">目標まであと 30 社</div>
       </div>
     </div>
     <div class="panel">
@@ -154,19 +154,19 @@ td.time { color: var(--red); font-weight: 700; }
           <div>
             <div style="font-size:0.7rem;color:var(--text-hint);font-weight:600;letter-spacing:0.05em;margin-bottom:3px;">来場者数の目標</div>
             <div style="display:flex;align-items:baseline;gap:6px;">
-              <span style="font-size:1.6rem;font-weight:700;color:var(--green);" id="gauge-att">—</span>
+              <span style="font-size:1.6rem;font-weight:700;color:var(--green);" id="gauge-att">0</span>
               <span style="font-size:0.85rem;color:var(--text-hint);">/ 50名</span>
             </div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:0.72rem;color:var(--text-hint);margin-bottom:3px;">達成率</div>
-            <div style="font-size:1.4rem;font-weight:700;color:var(--green);" id="gauge-att-pct">—%</div>
+            <div style="font-size:1.4rem;font-weight:700;color:var(--green);" id="gauge-att-pct">0%</div>
           </div>
         </div>
         <div style="background:var(--bg);border-radius:8px;height:14px;overflow:hidden;margin-bottom:8px;">
           <div id="gauge-att-bar" style="height:100%;border-radius:8px;background:var(--green);transition:width 1s cubic-bezier(0.4,0,0.2,1);width:0%;"></div>
         </div>
-        <div style="font-size:0.75rem;font-weight:600;" id="gauge-att-msg">—</div>
+        <div style="font-size:0.75rem;font-weight:600;" id="gauge-att-msg">目標まであと 50 名</div>
       </div>
     </div>
   </div>
@@ -178,10 +178,10 @@ td.time { color: var(--red); font-weight: 700; }
         <div>
           <div class="kpi-label">総申し込み数</div>
           <div style="display:flex;align-items:baseline;gap:8px;">
-            <div class="kpi-value red" id="kpi-total">—</div>
+            <div class="kpi-value red" id="kpi-total">0</div>
             <div style="font-size:0.8rem;color:var(--text-hint);">/ 30社</div>
           </div>
-          <div class="kpi-sub" id="kpi-progress-text">目標まで — 社</div>
+          <div class="kpi-sub" id="kpi-progress-text">目標まで 30 社</div>
         </div>
       </div>
       <div style="background:var(--bg);border-radius:6px;overflow:hidden;height:6px;">
@@ -194,18 +194,18 @@ td.time { color: var(--red); font-weight: 700; }
         <div>
           <div class="kpi-label">総来場者数</div>
           <div style="display:flex;align-items:baseline;gap:8px;">
-            <div class="kpi-value green" id="kpi-attendees">—</div>
+            <div class="kpi-value green" id="kpi-attendees">0</div>
             <div style="font-size:0.8rem;color:var(--text-hint);">/ 50名</div>
           </div>
-          <div class="kpi-sub" id="kpi-att-progress-text">目標まで — 名</div>
+          <div class="kpi-sub" id="kpi-att-progress-text">目標まで 50 名</div>
         </div>
       </div>
       <div style="background:var(--bg);border-radius:6px;overflow:hidden;height:6px;">
         <div id="kpi-att-progress-bar" style="height:100%;background:#059669;border-radius:6px;transition:width 0.8s;width:0%"></div>
       </div>
     </div>
-    <div class="kpi-card"><div class="kpi-icon blue">🛒</div><div><div class="kpi-label">ECサイト運用</div><div class="kpi-value blue" id="kpi-ec">—</div><div class="kpi-sub">名参加予定（13:30〜）</div></div></div>
-    <div class="kpi-card"><div class="kpi-icon purple">📱</div><div><div class="kpi-label">SNS運用</div><div class="kpi-value purple" id="kpi-sns">—</div><div class="kpi-sub">名参加予定（15:00〜）</div></div></div>
+    <div class="kpi-card"><div class="kpi-icon blue">🛒</div><div><div class="kpi-label">ECサイト運用</div><div class="kpi-value blue" id="kpi-ec">0</div><div class="kpi-sub">名参加予定（13:30〜）</div></div></div>
+    <div class="kpi-card"><div class="kpi-icon purple">📱</div><div><div class="kpi-label">SNS運用</div><div class="kpi-value purple" id="kpi-sns">0</div><div class="kpi-sub">名参加予定（15:00〜）</div></div></div>
   </div>
 
   <div class="grid2">
@@ -223,7 +223,7 @@ td.time { color: var(--red); font-weight: 700; }
     <div class="panel">
       <div class="panel-header">
         <span class="panel-title">申し込み一覧</span>
-        <span class="table-count-badge" id="table-count">— 件</span>
+        <span class="table-count-badge" id="table-count">0 件</span>
       </div>
       <div class="filters">
         <input class="search-input" type="text" id="search" placeholder="🔍　企業名・来場者名で検索..." oninput="renderTable()" />
@@ -251,7 +251,7 @@ td.time { color: var(--red); font-weight: 700; }
             </tr>
           </thead>
           <tbody id="table-body">
-            <tr><td colspan="7" class="no-data"><div class="loading"><div class="spinner"></div>読み込み中...</div></td></tr>
+            <tr><td colspan="7" class="no-data"><div class="loading"><div class="spinner"></div>データを取得しています...</div></td></tr>
           </tbody>
         </table>
       </div>
@@ -266,47 +266,54 @@ var sortKey = 'timestamp';
 var sortDir = 1;
 
 function loadData() {
+  document.getElementById('demo-badge').style.display = 'none';
+  document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="no-data"><div class="loading"><div class="spinner"></div>データを取得しています...</div></td></tr>';
+  
   fetch(SCRIPT_URL + '?action=get')
     .then(function(r){return r.json();})
-    .then(function(d){allData=d;render();document.getElementById('last-updated').textContent='最終更新: '+new Date().toLocaleTimeString('ja-JP');})
-    .catch(function(){
-      document.getElementById('demo-badge').style.display='block';
-      useDemoData();
+    .then(function(d){
+      if(d && d.error) throw new Error(d.error);
+      allData = Array.isArray(d) ? d : [];
+      render();
+      document.getElementById('last-updated').textContent = '最終更新: ' + new Date().toLocaleTimeString('ja-JP');
+    })
+    .catch(function(e){
+      console.error(e);
+      document.getElementById('demo-badge').textContent = '⚠️ データが取得できませんでした。スプレッドシートが空の可能性があります。';
+      document.getElementById('demo-badge').style.display = 'block';
+      allData = [];
+      render();
     });
 }
 
-function useDemoData() {
-  allData = [
-    {timestamp:'2026/06/01 10:23',company:'株式会社サンプル商事',attendee1:'田中 太郎',attendee2:'鈴木 花子',attendee3:'',time:'13:00',seminars:'ECサイト運用、SNS運用',sales:'上野 瑠久'},
-    {timestamp:'2026/06/02 14:11',company:'フレッシュマート佐賀',attendee1:'山田 一郎',attendee2:'',attendee3:'',time:'14:00',seminars:'SNS運用',sales:'真宮 清'},
-    {timestamp:'2026/06/03 09:45',company:'九州食品株式会社',attendee1:'中村 次郎',attendee2:'小林 三郎',attendee3:'伊藤 四郎',time:'10:30',seminars:'ECサイト運用',sales:'野田 健次'},
-    {timestamp:'2026/06/04 11:30',company:'スーパーみどり',attendee1:'渡辺 五郎',attendee2:'',attendee3:'',time:'15:00',seminars:'SNS運用',sales:'山本 和寛'},
-    {timestamp:'2026/06/05 16:02',company:'大和フード',attendee1:'佐藤 六郎',attendee2:'高橋 七子',attendee3:'',time:'13:30',seminars:'ECサイト運用、SNS運用',sales:'黒川 祐司'},
-    {timestamp:'2026/06/06 08:55',company:'マルイチ青果',attendee1:'松本 八郎',attendee2:'',attendee3:'',time:'11:00',seminars:'ECサイト運用',sales:'わからない'},
-    {timestamp:'2026/06/07 13:20',company:'博多商事株式会社',attendee1:'井上 九子',attendee2:'木村 十郎',attendee3:'',time:'14:30',seminars:'SNS運用',sales:'上野 瑠久'},
-    {timestamp:'2026/06/08 10:10',company:'さが有機農業',attendee1:'林 一花',attendee2:'',attendee3:'',time:'16:00',seminars:'ECサイト運用',sales:'真宮 清'},
-  ];
-  render();
-  document.getElementById('last-updated').textContent = 'デモデータ';
+function render() { 
+  renderKPI(); 
+  renderSalesChart(); 
+  renderTimeChart(); 
+  renderTable(); 
 }
-
-function render() { renderKPI(); renderSalesChart(); renderTimeChart(); renderTable(); }
 
 function renderKPI() {
   var t=allData.length;
   var sns=allData.filter(function(d){return d.seminars&&d.seminars.indexOf('SNS')>=0;}).length;
   var ec=allData.filter(function(d){return d.seminars&&d.seminars.indexOf('EC')>=0;}).length;
   var att=allData.reduce(function(s,d){return s+[d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();}).length;},0);
+  
   document.getElementById('kpi-total').textContent=t;
   var goal=30;
   var pct=Math.min(t/goal*100,100);
   document.getElementById('kpi-progress-bar').style.width=pct+'%';
   document.getElementById('kpi-progress-bar').style.background=t>=goal?'#059669':'#7B2228';
   document.getElementById('kpi-progress-text').textContent=t>=goal?'🎉 目標達成！':'目標まであと '+(goal-t)+' 社';
+  
   document.getElementById('kpi-sns').textContent=sns;
-  var compGoal=30,attGoal2=50;
+  document.getElementById('kpi-ec').textContent=ec;
+  document.getElementById('kpi-attendees').textContent=att;
+  
+  var compGoal=30, attGoal2=50;
   var compPct=Math.min(Math.round(t/compGoal*100),100);
   var attPct2=Math.min(Math.round(att/attGoal2*100),100);
+  
   document.getElementById('gauge-company').textContent=t;
   document.getElementById('gauge-company-pct').textContent=compPct+'%';
   document.getElementById('gauge-company-pct').style.color=t>=compGoal?'#059669':'#7B2228';
@@ -314,6 +321,7 @@ function renderKPI() {
   document.getElementById('gauge-company-bar').style.background=t>=compGoal?'#059669':'#7B2228';
   document.getElementById('gauge-company-msg').style.color=t>=compGoal?'#059669':'#d97706';
   document.getElementById('gauge-company-msg').textContent=t>=compGoal?'🎉 目標達成！おめでとうございます！':'目標まであと '+(compGoal-t)+' 社';
+  
   document.getElementById('gauge-att').textContent=att;
   document.getElementById('gauge-att-pct').textContent=attPct2+'%';
   document.getElementById('gauge-att-pct').style.color=att>=attGoal2?'#059669':'#2563eb';
@@ -321,8 +329,7 @@ function renderKPI() {
   document.getElementById('gauge-att-bar').style.background=att>=attGoal2?'#059669':'#2563eb';
   document.getElementById('gauge-att-msg').style.color=att>=attGoal2?'#059669':'#d97706';
   document.getElementById('gauge-att-msg').textContent=att>=attGoal2?'🎉 目標達成！おめでとうございます！':'目標まであと '+(attGoal2-att)+' 名';
-  document.getElementById('kpi-ec').textContent=ec;
-  document.getElementById('kpi-attendees').textContent=att;
+  
   var attGoal=50;
   var attPct=Math.min(att/attGoal*100,100);
   document.getElementById('kpi-att-progress-bar').style.width=attPct+'%';
@@ -333,7 +340,7 @@ function renderSalesChart() {
   var sales=['真宮 清','山本 和寛','野田 健次','黒川 祐司','上野 瑠久','わからない'];
   var colors=['#dc2626','#2563eb','#7c3aed','#059669','#d97706','#9ca3af'];
   var counts=sales.map(function(s){return allData.filter(function(d){return d.sales===s;}).length;});
-  var max=Math.max.apply(null,counts)||1;
+  var max=Math.max.apply(null,counts)||1; // 0件のときのエラー回避
   document.getElementById('sales-chart').innerHTML=sales.map(function(s,i){
     return '<div class="bar-row"><div class="bar-label">'+s+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(counts[i]/max*100)+'%;background:'+colors[i]+'"></div></div><div class="bar-count">'+counts[i]+'</div></div>';
   }).join('');
@@ -342,12 +349,12 @@ function renderSalesChart() {
 function renderTimeChart() {
   var slots=['10:00','10:30','11:00','12:00','13:00','13:30','14:00','14:30','15:00','15:30','16:00','17:00'];
   var counts=slots.map(function(t){return allData.filter(function(d){return d.time===t;}).length;});
-  var max=Math.max.apply(null,counts)||1;
+  var max=Math.max.apply(null,counts)||1; // 0件のときのエラー回避
   var html=slots.map(function(t,i){
     if(!counts[i])return '';
     return '<div class="tl-row"><div class="tl-time">'+t+'</div><div class="tl-track"><div class="tl-fill" style="width:'+(counts[i]/max*100)+'%"></div></div><div class="tl-count">'+counts[i]+'件</div></div>';
   }).filter(Boolean).join('');
-  document.getElementById('time-chart').innerHTML=html||'<div class="no-data">データなし</div>';
+  document.getElementById('time-chart').innerHTML=html||'<div class="no-data" style="font-size:0.8rem;color:#9ca3af;text-align:center;padding:20px;">まだ予約データがありません</div>';
 }
 
 function renderTable() {
@@ -358,10 +365,16 @@ function renderTable() {
     var mq=!q||(d.company||'').toLowerCase().indexOf(q)>=0||[d.attendee1,d.attendee2,d.attendee3].some(function(a){return a&&a.toLowerCase().indexOf(q)>=0;});
     return mq&&(!fs||d.sales===fs)&&(!fsem||(d.seminars||'').indexOf(fsem)>=0);
   });
+  
   filtered.sort(function(a,b){var av=a[sortKey]||'',bv=b[sortKey]||'';return av<bv?-sortDir:av>bv?sortDir:0;});
   window._currentFiltered=filtered;
   document.getElementById('table-count').textContent=filtered.length+' 件';
-  if(!filtered.length){document.getElementById('table-body').innerHTML='<tr><td colspan="7" class="no-data">該当するデータがありません</td></tr>';return;}
+  
+  if(!filtered.length){
+    document.getElementById('table-body').innerHTML='<tr><td colspan="7" class="no-data">申し込みデータがありません</td></tr>';
+    return;
+  }
+  
   document.getElementById('table-body').innerHTML=filtered.map(function(d,i){
     var atts=[d.attendee1,d.attendee2,d.attendee3].filter(function(a){return a&&a.trim();});
     var tags=(d.seminars||'').split('、').filter(Boolean).map(function(s){return '<span class="tag '+(s.indexOf('SNS')>=0?'tag-sns':'tag-ec')+'">'+s+'</span>';}).join('');
@@ -395,11 +408,13 @@ var salesColors={
   '上野 瑠久':{bg:'#fef3c7',color:'#d97706',border:'#fcd34d'},
   'わからない':{bg:'#f3f4f6',color:'#9ca3af',border:'#d1d5db'}
 };
+
 function salesTag(name){
   if(!name)return '<span style="color:var(--text-hint);font-size:0.72rem;">未選択</span>';
   var c=salesColors[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
   return '<span style="display:inline-flex;align-items:center;padding:3px 10px;background:'+c.bg+';border:1px solid '+c.border+';border-radius:20px;font-size:0.7rem;font-weight:600;color:'+c.color+';">'+name+'</span>';
 }
+
 function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderTable();}
 
 function downloadExcel(){
@@ -417,7 +432,7 @@ function downloadExcel(){
   URL.revokeObjectURL(url);
 }
 
-loadData();
+window.onload = loadData;
 </script>
 </body>
 </html>
