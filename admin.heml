@@ -124,7 +124,7 @@ td.time { color: var(--red); font-weight: 700; }
 </div>
 
 <div class="main">
-  <div class="demo-badge" id="demo-badge">📊 デモデータを表示しています。Apps ScriptのURLを設定すると実データが表示されます。</div>
+  <div class="demo-badge" id="demo-badge">📊 デモデータを表示しています。接続エラーが発生しています。</div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
     <div class="panel">
@@ -266,14 +266,13 @@ var sortKey = 'timestamp';
 var sortDir = 1;
 
 function loadData() {
-  if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxxwhZQA78m7GF9bO-A0TtZH466RVOv1z5wV-c22R4CYZBm2rQkxsvh_QlzpAHNnbbb/exec') {
-    document.getElementById('demo-badge').style.display = 'block';
-    useDemoData(); return;
-  }
   fetch(SCRIPT_URL + '?action=get')
     .then(function(r){return r.json();})
     .then(function(d){allData=d;render();document.getElementById('last-updated').textContent='最終更新: '+new Date().toLocaleTimeString('ja-JP');})
-    .catch(useDemoData);
+    .catch(function(){
+      document.getElementById('demo-badge').style.display='block';
+      useDemoData();
+    });
 }
 
 function useDemoData() {
