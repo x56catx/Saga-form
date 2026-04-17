@@ -453,9 +453,83 @@ function renderTable() {
       '<td class="time-cell">'+formatTimeOnly(d.time)+'</td>' +
       '<td>'+(tags||'—')+'</td>' +
       '<td>'+salesTag+'</td>' +
-      '<td><button class="btn-cancel" onclick="cancelRow('+(d.rowNumber||i)+', this)">キャンセル</button></td>' +
+      '<td style="display:flex;gap:6px;">'+
+      '<button onclick="openEditModal('+i+')" style="padding:4px 10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;color:#2563eb;font-size:0.68rem;font-weight:700;cursor:pointer;font-family:inherit;">編集</button>'+
+      '<button class="btn-cancel" onclick="cancelRow('+(d.rowNumber||i)+', this)">キャンセル</button>'+
+    '</td>' +
     '</tr>';
   }).join('');
+}
+
+var editingRow = null;
+var editingIndex = null;
+var selectedSales = null;
+
+function openEditModal(index) {
+  var d = (window._currentFiltered||[])[index];
+  if (!d) return;
+  editingRow = d;
+  editingIndex = index;
+  selectedSales = d.sales || '';
+
+  document.getElementById('modal-company').textContent = d.company || '—';
+
+  var names = ['真宮 清','山本 和寛','野田 健次','黒川 祐司','上野 瑠久','わからない'];
+  document.getElementById('modal-sales-btns').innerHTML = names.map(function(name){
+    var sc = SALES_COLORS[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+    var isSelected = name === selectedSales;
+    return '<button onclick="selectModalSales(this,''+name+'')" data-name="'+name+'" style="'+
+      'padding:10px 8px;border-radius:8px;font-size:0.82rem;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;'+
+      (isSelected
+        ? 'background:'+sc.bg+';border:2px solid '+sc.color+';color:'+sc.color+';'
+        : 'background:#fafafa;border:1px solid var(--border2);color:var(--text-sub);')+
+      '">'+name+'</button>';
+  }).join('');
+
+  var modal = document.getElementById('edit-modal');
+  modal.style.display = 'flex';
+}
+
+function selectModalSales(btn, name) {
+  selectedSales = name;
+  var btns = document.querySelectorAll('#modal-sales-btns button');
+  btns.forEach(function(b) {
+    var n = b.getAttribute('data-name');
+    var sc = SALES_COLORS[n]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+    if (n === name) {
+      b.style.background = sc.bg;
+      b.style.border = '2px solid '+sc.color;
+      b.style.color = sc.color;
+    } else {
+      b.style.background = '#fafafa';
+      b.style.border = '1px solid var(--border2)';
+      b.style.color = 'var(--text-sub)';
+    }
+  });
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  editingRow = null; editingIndex = null; selectedSales = null;
+}
+
+function saveEdit() {
+  if (!editingRow || !selectedSales) return;
+  var btn = document.getElementById('modal-save-btn');
+  btn.textContent = '保存中...'; btn.disabled = true;
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({action:'update', rowNumber: editingRow.rowNumber, sales: selectedSales})
+  }).then(function(){
+    closeModal();
+    loadData();
+  }).catch(function(){
+    // オフラインでもローカル更新
+    editingRow.sales = selectedSales;
+    closeModal();
+    render();
+  });
 }
 
 function cancelRow(rowNum, btn) {
@@ -483,5 +557,26 @@ function downloadExcel() {
 
 window.onload = loadData;
 </script>
+<!-- 編集モーダル -->
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;padding:2rem;">
+  <div style="background:#fff;border-radius:16px;padding:2rem;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+      <div>
+        <div style="font-size:1rem;font-weight:700;">担当営業を変更</div>
+        <div style="font-size:0.75rem;color:var(--text-hint);margin-top:2px;" id="modal-company">—</div>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-hint);padding:4px;">✕</button>
+    </div>
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--text-hint);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">担当営業を選択</div>
+      <div id="modal-sales-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeModal()" style="flex:1;padding:10px;border:1px solid var(--border2);border-radius:8px;background:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-sub);">キャンセル</button>
+      <button onclick="saveEdit()" id="modal-save-btn" style="flex:2;padding:10px;border:none;border-radius:8px;background:var(--red);color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;">変更を保存</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
