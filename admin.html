@@ -303,7 +303,7 @@ function loadData() {
       document.getElementById('last-updated').textContent = '最終更新: ' + new Date().toLocaleTimeString('ja-JP');
     })
     .catch(function(){
-      useDemoData();
+      document.getElementById('last-updated').textContent = '接続エラー - データを取得できません';
     });
 }
 
@@ -523,18 +523,20 @@ function saveEdit() {
   var btn = document.getElementById('modal-save-btn');
   btn.textContent = '保存中...'; btn.disabled = true;
 
+  // ローカルデータを先に更新
+  editingRow.sales = selectedSales;
+  closeModal();
+  render();
+  btn.disabled = false;
+  btn.textContent = '変更を保存';
+
+  // バックグラウンドでスプレッドシートも更新
   fetch(SCRIPT_URL, {
     method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({action:'update', rowNumber: editingRow.rowNumber, sales: selectedSales})
-  }).then(function(){
-    closeModal();
-    loadData();
-  }).catch(function(){
-    // オフラインでもローカル更新
-    editingRow.sales = selectedSales;
-    closeModal();
-    render();
-  });
+  }).catch(function(){});
 }
 
 function cancelRow(rowNum, btn) {
