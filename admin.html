@@ -450,7 +450,7 @@ function renderTable() {
     return '<tr>' +
       '<td style="color:var(--text-hint);font-size:0.7rem;">'+formatTimeOnly(d.timestamp)+'</td>' +
       '<td class="company">'+(d.company||'—')+'</td>' +
-      '<td style="font-size:0.78rem;">'+(atts[0]||'—')+(atts.length>1?' 他'+( atts.length-1)+'名':'')+'</td>' +
+      '<td style="font-size:0.78rem;">'+(atts.length>0?atts.join('<br>'):'—')+'</td>' +
       '<td class="time-cell">'+formatTimeOnly(d.time)+'</td>' +
       '<td>'+(tags||'—')+'</td>' +
       '<td>'+salesTag+'</td>' +
