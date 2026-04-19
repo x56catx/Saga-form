@@ -476,37 +476,41 @@ function openEditModal(index) {
   document.getElementById('modal-company').textContent = d.company || '—';
 
   var names = ['真宮 清','山本 和寛','野田 健次','黒川 祐司','上野 瑠久','わからない'];
-  document.getElementById('modal-sales-btns').innerHTML = names.map(function(name){
-    var sc = SALES_COLORS[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+  var btnsHtml = '';
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var sc = SALES_COLORS[name] || {bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
     var isSelected = name === selectedSales;
-    return '<button onclick="selectModalSales(this,\'' + name + '\')" data-name="'+name+'" style="'+
-      'padding:10px 8px;border-radius:8px;font-size:0.82rem;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;'+
-      (isSelected
-        ? 'background:'+sc.bg+';border:2px solid '+sc.color+';color:'+sc.color+';'
-        : 'background:#fafafa;border:1px solid var(--border2);color:var(--text-sub);')+
-      '">'+name+'</button>';
-  }).join('');
+    var styleStr = 'padding:10px 8px;border-radius:8px;font-size:0.82rem;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;';
+    if (isSelected) {
+      styleStr += 'background:'+sc.bg+';border:2px solid '+sc.color+';color:'+sc.color+';';
+    } else {
+      styleStr += 'background:#fafafa;border:1px solid #d1d5db;color:#6b7280;';
+    }
+    btnsHtml += '<button data-name="' + name + '" style="' + styleStr + '" onclick="selectModalSales(this)">' + name + '</button>';
+  }
+  document.getElementById('modal-sales-btns').innerHTML = btnsHtml;
 
-  var modal = document.getElementById('edit-modal');
-  modal.style.display = 'flex';
+  document.getElementById('edit-modal').style.display = 'flex';
 }
 
-function selectModalSales(btn, name) {
-  selectedSales = name;
+function selectModalSales(btn) {
+  selectedSales = btn.getAttribute('data-name');
   var btns = document.querySelectorAll('#modal-sales-btns button');
-  btns.forEach(function(b) {
+  for (var i = 0; i < btns.length; i++) {
+    var b = btns[i];
     var n = b.getAttribute('data-name');
-    var sc = SALES_COLORS[n]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
-    if (n === name) {
+    var sc = SALES_COLORS[n] || {bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
+    if (n === selectedSales) {
       b.style.background = sc.bg;
-      b.style.border = '2px solid '+sc.color;
+      b.style.border = '2px solid ' + sc.color;
       b.style.color = sc.color;
     } else {
       b.style.background = '#fafafa';
-      b.style.border = '1px solid var(--border2)';
-      b.style.color = 'var(--text-sub)';
+      b.style.border = '1px solid #d1d5db';
+      b.style.color = '#6b7280';
     }
-  });
+  }
 }
 
 function closeModal() {
