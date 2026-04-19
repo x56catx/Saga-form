@@ -432,6 +432,7 @@ function renderTable() {
     return mq && (!fs||d.sales===fs) && (!fsem||(d.seminars||'').indexOf(fsem)>=0);
   });
 
+  window._currentFiltered = filtered;
   document.getElementById('table-count').textContent = filtered.length + ' 件';
 
   if (!filtered.length) {
@@ -478,7 +479,7 @@ function openEditModal(index) {
   document.getElementById('modal-sales-btns').innerHTML = names.map(function(name){
     var sc = SALES_COLORS[name]||{bg:'#f3f4f6',color:'#6b7280',border:'#d1d5db'};
     var isSelected = name === selectedSales;
-    return '<button onclick="selectModalSales(this,''+name+'')" data-name="'+name+'" style="'+
+    return '<button onclick="selectModalSales(this,\'' + name + '\')" data-name="'+name+'" style="'+
       'padding:10px 8px;border-radius:8px;font-size:0.82rem;font-family:inherit;cursor:pointer;font-weight:600;transition:all 0.15s;'+
       (isSelected
         ? 'background:'+sc.bg+';border:2px solid '+sc.color+';color:'+sc.color+';'
